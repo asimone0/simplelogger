@@ -1,0 +1,1 @@
+-keep class click.simone.simplelogger.** { *; }
