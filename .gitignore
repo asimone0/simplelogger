@@ -6,8 +6,13 @@ local.properties
 .DS_Store
 build/
 captures/
+.externalNativeBuild
+
+# vscode
+.vscode/
 
 # Buildship
-.vscode/
 .settings/
 .project
+.classpath
+
