@@ -7,15 +7,15 @@ interface Logger {
     fun logThrowable(obj: Any, message: String, e: Throwable)
 }
 
-object SimpleLogger : Logger {
+object SimpleLogger  {
     var shouldLog = false
     var logger: Logger = AndroidLogger()
 
-    override fun logDebug(obj: Any, message: String) {
+    fun log(obj: Any, message: String) {
         if (shouldLog) logger.logDebug(obj, message)
     }
 
-    override fun logThrowable(obj: Any, message: String, e: Throwable) {
+    fun log(obj: Any, message: String, e: Throwable) {
         if (shouldLog) logger.logThrowable(obj, message, e)
     }
 }
