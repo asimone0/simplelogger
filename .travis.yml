@@ -29,11 +29,8 @@ install:
   - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platform-tools'
   - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'build-tools;26.0.0'
   - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platforms;android-26'
-  - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;android;m2repository'
-  - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;google;google_play_services'
-  - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;google;m2repository'
 
 env:
   - ANDROID_HOME=$HOME/android-sdk
 
-script: ./gradlew test
+script: ./gradlew lintDebug testDebug
