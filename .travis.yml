@@ -6,4 +6,6 @@ android:
     - build-tools-26.0.0
     - android-26
 
+before_install:
+ - chmod +x gradlew
 script: ./gradlew test
