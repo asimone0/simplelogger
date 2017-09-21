@@ -16,3 +16,11 @@ install:
   - if test ! -e $HOME/android-sdk-download/sdk-tools-linux-3859397.zip ; then curl https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip > $HOME/android-sdk-download/sdk-tools-linux-3859397.zip ; fi
   - unzip -n $HOME/android-sdk-download/sdk-tools-linux-3859397.zip -d $HOME/android-sdk
   - echo y | $HOME/android-sdk/tools/bin/sdkmanager --update
+  - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'build-tools;26.0.0'
+  - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platforms;android-26'
+  - chmod +x gradlew
+
+env:
+  - ANDROID_HOME=$HOME/android-sdk
+
+script: ./gradlew test
