@@ -35,7 +35,7 @@ class SimpleLoggerTest {
     @Test
     fun logDebug() {
         SimpleLogger.shouldLog = true
-        SimpleLogger.logDebug(this, "test")
+        SimpleLogger.log(this, "test")
         assertSame(this, mockLogger.obj)
         assertEquals("test", mockLogger.message)
         assertNull(mockLogger.e)
@@ -44,7 +44,7 @@ class SimpleLoggerTest {
     @Test
     fun logDebugWithShouldLogFalse() {
         SimpleLogger.shouldLog = false
-        SimpleLogger.logDebug(this, "test")
+        SimpleLogger.log(this, "test")
         assertEquals("", mockLogger.obj)
         assertEquals("", mockLogger.message)
         assertNull(mockLogger.e)
@@ -54,7 +54,7 @@ class SimpleLoggerTest {
     fun logThrowable() {
         SimpleLogger.shouldLog = true
         val t = IllegalArgumentException()
-        SimpleLogger.logThrowable(this, "test", t)
+        SimpleLogger.log(this, "test", t)
         assertSame(this, mockLogger.obj)
         assertEquals("test", mockLogger.message)
         assertSame(t, mockLogger.e)
@@ -64,7 +64,7 @@ class SimpleLoggerTest {
     fun logThrowableWithShouldLogFalse() {
         SimpleLogger.shouldLog = false
         val t = IllegalArgumentException()
-        SimpleLogger.logThrowable(this, "test", t)
+        SimpleLogger.log(this, "test", t)
         assertEquals("", mockLogger.obj)
         assertEquals("", mockLogger.message)
         assertNull(mockLogger.e)
