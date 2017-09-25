@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'org.ajoberstar.grgit'
 
 android {
     compileSdkVersion 26
@@ -32,23 +34,104 @@ tasks.withType(Test) {
     }
 }
 
-publishing {
-    publications {
-        aar(MavenPublication) {
-            groupId 'click.simone'
-            artifactId 'simplelogger'
-            version android.defaultConfig.versionName
-            artifact "$buildDir/outputs/aar/$archivesBaseName-release.aar" 
-            pom.withXml {
-                def dependenciesNode = asNode().appendNode('dependencies')
-                configurations.implementation.allDependencies.each {
-                    if (!("unspecified".equalsIgnoreCase(it.name))){
-                        def dependencyNode = dependenciesNode.appendNode('dependency')
-                        dependencyNode.appendNode('groupId', it.group)
-                        dependencyNode.appendNode('artifactId', it.name)
-                        dependencyNode.appendNode('version', it.version)
+task sourcesJar(type: Jar) {
+    description "Generates sources jar file"
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+afterEvaluate {
+    tasks.assembleRelease.dependsOn sourcesJar
+}
+
+if (project.file('local.properties').exists()) {
+
+    afterEvaluate{
+        tasks.bintrayUpload.dependsOn assembleRelease, tagRelease
+    }
+
+    task checkGit {
+        doLast {
+            def status = grgit.status()
+            if (!status.isClean()) {
+                throw new GradleException("There are uncommitted files");
+            }
+
+            def currentBranch = grgit.branch.getCurrent()
+            def currentBranchName = currentBranch.getName()
+            println "Current buranch is ${currentBranchName}"
+
+            def trackingBranch = currentBranch.trackingBranch
+            if (trackingBranch == null) {
+                throw new GradleException("Push current branch ${currentBranchName}\nor set upstream branch");
+            }
+            def trackingBranchName = trackingBranch.getName()
+            def log = grgit.log {
+                range trackingBranchName, currentBranchName
+            }
+            if (log.size() > 0) {
+                throw new GradleException("There are unpushed commits")
+            }
+        }
+    }
+
+    task tagRelease(dependsOn: checkGit) {
+        description = 'Tags the current head with the project\'s version.'
+        doLast {
+            grgit.tag.add {
+                name = android.defaultConfig.versionName
+                message = "Release of ${android.defaultConfig.versionName}"
+            }
+        }
+    }
+
+    Properties properties = new Properties()
+    properties.load(project.file('local.properties').newDataInputStream())
+
+    publishing {
+        publications {
+            aar(MavenPublication) {
+                groupId = properties.getProperty('publishing.groupId')
+                artifactId project.name
+                version = android.defaultConfig.versionName
+                artifact "$buildDir/outputs/aar/$archivesBaseName-release.aar"
+                artifact("${project.buildDir}/libs/${archivesBaseName}-sources.jar") {
+                    classifier = 'sources'
+                }
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    configurations.compile.allDependencies.each {
+                        if (!("unspecified".equalsIgnoreCase(it.name))) {
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                        }
                     }
                 }
+            }
+        }
+    }
+
+    bintray {
+        user = properties.getProperty('bintray.user')
+        key = properties.getProperty('bintray.apikey')
+        publications = ['aar']
+        pkg {
+            repo = properties.getProperty('bintray.repo')
+            name = project.name
+            publish = true
+            licenses = ['MIT']
+            desc = 'A small android logging library'
+            websiteUrl = properties.getProperty("bintray.websiteUrl")
+            issueTrackerUrl = "${properties.getProperty('bintray.websiteUrl')}/issues"
+            vcsUrl = "${properties.getProperty('bintray.websiteUrl')}.git"
+            labels = ['android', 'logging', 'kotlin']
+            version {
+                name = android.defaultConfig.versionName
+                released  = new Date()
+                desc = 'simplelogger ' + android.defaultConfig.versionName
+                vcsTag = android.defaultConfig.versionName
             }
         }
     }
