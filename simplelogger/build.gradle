@@ -59,7 +59,7 @@ if (project.file('local.properties').exists()) {
 
             def currentBranch = grgit.branch.getCurrent()
             def currentBranchName = currentBranch.getName()
-            println "Current buranch is ${currentBranchName}"
+            println "Current branch is ${currentBranchName}"
 
             def trackingBranch = currentBranch.trackingBranch
             if (trackingBranch == null) {
