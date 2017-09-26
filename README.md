@@ -5,7 +5,7 @@
 
 A very simple logging library for android.
 
-Offers debug and error logging variants, and a simple boolean flag to turn it all off.
+Offers ONLY debug and error logging variants, and a simple boolean flag to turn it all off.
 
 A typical usage (kotlin):
 ```kotlin
@@ -20,7 +20,7 @@ To use:
 ```gradle
 repositories {
     maven {
-        url 'https://dl.bintray.com/asimone0/maven'
+        jcenter()
     }
 }
 
