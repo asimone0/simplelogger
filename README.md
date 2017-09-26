@@ -16,12 +16,9 @@ SimpleLogger.log(this, "Error!", Exception("Something went wrong"))
 
 Note: The log tag is derived from the toString() result of the object passed in.
 
-To use:
 ```gradle
 repositories {
-    maven {
-        url 'https://dl.bintray.com/asimone0/maven'
-    }
+    jcenter()
 }
 
 
