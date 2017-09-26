@@ -18,14 +18,14 @@ Note: The log tag is derived from the toString() result of the object passed in.
 
 To use:
 ```gradle
-repositories{
-    maven{
+repositories {
+    maven {
         url 'https://dl.bintray.com/asimone0/maven'
     }
 }
 
 
-dependencies{
+dependencies {
     implementation 'click.simone:simplelogger:<version>'
 }
 ```
