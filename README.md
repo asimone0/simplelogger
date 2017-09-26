@@ -20,7 +20,7 @@ To use:
 ```gradle
 repositories {
     maven {
-        jcenter()
+        url 'https://dl.bintray.com/asimone0/maven'
     }
 }
 
