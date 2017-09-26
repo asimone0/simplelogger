@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/asimone0/volleytools.svg?branch=master)](https://travis-ci.org/asimone0/volleytools)
+[![Build Status](https://travis-ci.org/asimone0/simplelogger.svg?branch=master)](https://travis-ci.org/asimone0/simplelogger)
 [ ![Download](https://api.bintray.com/packages/asimone0/maven/simplelogger/images/download.svg) ](https://bintray.com/asimone0/maven/simplelogger/_latestVersion)
 
 ## simplelogger
