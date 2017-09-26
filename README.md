@@ -14,9 +14,7 @@ SimpleLogger.log("Activity", "Something noteworthy happened")
 SimpleLogger.log(this, "Error!", Exception("Something went wrong"))
 ```
 
-Note:
-
-The log tag parameter is derived from the toString() result of the object passed in.
+Note: The log tag parameter is derived from the toString() result of the object passed in.
 
 To use:
 ```gradle
