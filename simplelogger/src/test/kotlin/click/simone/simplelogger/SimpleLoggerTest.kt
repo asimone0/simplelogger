@@ -12,12 +12,12 @@ class SimpleLoggerTest {
         var message: String = ""
         var e: Throwable? = null
 
-        override fun logDebug(obj: Any, message: String) {
+        override fun log(obj: Any, message: String) {
             this.obj = obj
             this.message = message
         }
 
-        override fun logThrowable(obj: Any, message: String, e: Throwable) {
+        override fun log(obj: Any, message: String, e: Throwable) {
             this.obj = obj
             this.message = message
             this.e = e
@@ -33,7 +33,17 @@ class SimpleLoggerTest {
     }
 
     @Test
-    fun logDebug() {
+    fun getLogger() {
+        assertSame(mockLogger, SimpleLogger.logger)
+    }
+
+    @Test
+    fun getShouldLog() {
+        assertFalse(SimpleLogger.shouldLog)
+    }
+
+    @Test
+    fun log() {
         SimpleLogger.shouldLog = true
         SimpleLogger.log(this, "test")
         assertSame(this, mockLogger.obj)
@@ -42,7 +52,7 @@ class SimpleLoggerTest {
     }
 
     @Test
-    fun logDebugWithShouldLogFalse() {
+    fun logWithShouldLogSetToFalse() {
         SimpleLogger.shouldLog = false
         SimpleLogger.log(this, "test")
         assertEquals("", mockLogger.obj)
@@ -51,7 +61,7 @@ class SimpleLoggerTest {
     }
 
     @Test
-    fun logThrowable() {
+    fun logWithThrowable() {
         SimpleLogger.shouldLog = true
         val t = IllegalArgumentException()
         SimpleLogger.log(this, "test", t)
@@ -61,7 +71,7 @@ class SimpleLoggerTest {
     }
 
     @Test
-    fun logThrowableWithShouldLogFalse() {
+    fun logWithThrowableWithShouldLogSetToFalse() {
         SimpleLogger.shouldLog = false
         val t = IllegalArgumentException()
         SimpleLogger.log(this, "test", t)

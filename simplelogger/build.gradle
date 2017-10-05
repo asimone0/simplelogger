@@ -3,18 +3,56 @@ apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'org.ajoberstar.grgit'
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.7.6.201602180812"
+    reportsDir = file("$buildDir")
+}
+
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+
+    def excludes = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/AndroidLogger.*'
+    ]
+
+    def kotlinDebugTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: excludes)
+    def mainSrc = "${project.projectDir}/src/test/kotlin"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([kotlinDebugTree])
+    executionData = fileTree(dir: "$buildDir", includes: [
+            "jacoco/testDebugUnitTest.exec",
+            "outputs/code-coverage/connected/*coverage.ec"
+    ])
+}
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
-        versionName "1.0.0"
+        versionName "2.0.0"
         setProperty('archivesBaseName', "$archivesBaseName-$versionName")
         consumerProguardFiles 'proguard-rules.pro'
+    }
+
+    buildTypes {
+        debug {
+            testCoverageEnabled = true
+        }
     }
 
     sourceSets{

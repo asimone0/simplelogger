@@ -3,29 +3,29 @@ package click.simone.simplelogger
 import android.util.Log
 
 interface Logger {
-    fun logDebug(obj: Any, message: String)
-    fun logThrowable(obj: Any, message: String, e: Throwable)
+    fun log(obj: Any, message: String)
+    fun log(obj: Any, message: String, e: Throwable)
 }
 
-object SimpleLogger  {
+object SimpleLogger : Logger {
     var shouldLog = false
     var logger: Logger = AndroidLogger()
 
-    fun log(obj: Any, message: String) {
-        if (shouldLog) logger.logDebug(obj, message)
+    override fun log(obj: Any, message: String) {
+        if (shouldLog) logger.log(obj, message)
     }
 
-    fun log(obj: Any, message: String, e: Throwable) {
-        if (shouldLog) logger.logThrowable(obj, message, e)
+    override fun log(obj: Any, message: String, e: Throwable) {
+        if (shouldLog) logger.log(obj, message, e)
     }
 }
 
 class AndroidLogger : Logger {
-    override fun logDebug(obj: Any, message: String) {
+    override fun log(obj: Any, message: String) {
         Log.d(tag(obj), message)
     }
 
-    override fun logThrowable(obj: Any, message: String, e: Throwable) {
+    override fun log(obj: Any, message: String, e: Throwable) {
         Log.e(tag(obj), message, e)
     }
 
