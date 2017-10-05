@@ -14,7 +14,15 @@ SimpleLogger.log("Activity", "Something noteworthy happened")
 SimpleLogger.log(this, "Error!", Exception("Something went wrong"))
 ```
 
+More details:
+
+`Logger` is a simple interface and can be customized to your needs.
+
+By default, SimpleLogger uses the provided `AndroidLogger` class.
+
 Note: The log tag is derived from the toString() result of the object passed in.
+
+####
 
 ```gradle
 repositories {
